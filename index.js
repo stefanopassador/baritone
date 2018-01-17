@@ -6,7 +6,7 @@ const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const mb = menubar();
 
-mb.setOption('preload-window', true);
+mb.setOption('preloadWindow', true);
 mb.setOption('height', 464);
 
 const spotify = require('./spotify.js');
@@ -108,6 +108,10 @@ ipcMain.on('skip', function(event, data) {
 ipcMain.on('shuffle', function(event, data) {
   spotify.shuffle(data);
 });
+
+ipcMain.on('setVolume', function(event, data) {
+  spotify.setVolume(data);
+})
 
 ipcMain.on('repeat', function(event, data) {
   spotify.repeat(data);
