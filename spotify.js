@@ -106,12 +106,12 @@ module.exports.getCurrentAlbumId = function() {
         }
       }
       if (typeof mainWindow !== 'undefined') {
-        console.log("VOLUME is =" + data.volume);
+        console.log("VOLUME is =" + data.volume * 100);
         mainWindow.webContents.send('position', (data.playing_position / data.track.length) * 100);
         mainWindow.webContents.send('length', data.track.length);
         mainWindow.webContents.send('playing', data.playing);
         mainWindow.webContents.send('shuffle', data.shuffle);
-        mainWindow.webContents.send('volume', data.volume);
+        mainWindow.webContents.send('volume', data.volume * 100);
         mainWindow.webContents.send('repeat', data.repeat);
         mainWindow.webContents.send('next_enabled', data.next_enabled);
         mainWindow.webContents.send('prev_enabled', data.prev_enabled);
@@ -153,9 +153,9 @@ module.exports.shuffle = function(shuffle) {
 
 module.exports.setVolume = function(newVolume) {
   console.log("VOLUME VOLUME TO ="+newVolume);
-  if(newVolume > 1) newVolume = 1;
+  if(newVolume > 100) newVolume = 100;
   if(newVolume < 0) newVolume = 0;
-  newVolume = newVolume * 100;
+  //newVolume = newVolume * 100;
   exec('osascript -e \'tell application "Spotify" to set sound volume to ' + newVolume + '\'');
   //exec('osascript -e \'tell application "Spotify" set the sound volume to '+ volume + '\'');
 }

@@ -81,6 +81,13 @@
         margin-top: 8px;
         font-size: 16px !important;
       }
+      #volume-slider {
+        position: absolute;
+        right: 15px;
+        margin-top: 8px;
+        font-size: 16px !important;
+      }
+
       #volume-down-btn {
         position: absolute;
         left: 15px;
@@ -89,19 +96,19 @@
       }
       #prev-btn {
         position: absolute;
-        left: 130px;
+        left: 160px;
         margin-top: 3px;
         font-size: 24px !important;
       }
       #next-btn {
         position: absolute;
-        right: 130px;
+        right: 160px;
         margin-top: 3px;
         font-size: 24px !important;
       }
       #repeat-btn {
         position: absolute;
-        right: 60px;
+        left: 90px;
         margin-top: 8px;
         font-size: 16px !important;
       }
@@ -187,13 +194,18 @@
   </head>
   <body>
     <div id="control-bar">
+      <!--
       <i id="volume-down-btn" class="fa fa-minus" aria-hidden="true" onclick="volumeDown()"></i>
+      -->
       <i id="shuffle-btn" class="fa fa-random" aria-hidden="true" onclick="shuffle()"></i>
       <i id="prev-btn" class="fa fa-step-backward" aria-hidden="true" onclick="prev()"></i>
       <i id="play-btn" class="fa fa-play" aria-hidden="true" onclick="play()"></i>
       <i id="next-btn" class="fa fa-step-forward" aria-hidden="true" onclick="next()"></i>
       <i id="repeat-btn" class="fa fa-retweet" aria-hidden="true" onclick="repeat()"></i>
+      <!--
       <i id="volume-up-btn" class="fa fa-plus" aria-hidden="true" onclick="volumeUp()"></i>
+      -->
+      <input type="range" min="10" max="100" value="50" class="slider" id="volume-slider" oninput="setVolume()">
     </div>
     <img id="cover">
     <div id="position"></div>
@@ -232,7 +244,8 @@
     });
     ipc.on('volume', function(volume) {
       //document.getElementById('volume-up-btn').setAttribute('style', 'color: #23CF5F;');
-      currentVolume = volume
+      currentVolume = volume;
+      document.getElementById('volume-slider').value = volume;
     });
     ipc.on('volumeDown', function() {
       //document.getElementById('volume-down-btn').setAttribute('style', 'color: #23CF5F;');
@@ -262,14 +275,20 @@
     ipc.on('settings', function(settings) {
       document.getElementById('track-info').style.display = settings.showTrackTitle ? 'initial' : 'none';
     });
+    //
     function shuffle() {
       ipc.send('shuffle', !shuffling);
     }
-    function volumeUp() {
-      ipc.send('setVolume', currentVolume + 0.1);
-    }
-    function volumeDown() {
-      ipc.send('setVolume', currentVolume - 0.1);
+    // function volumeUp() {
+    //   ipc.send('setVolume', currentVolume + 0.1);
+    // }
+    // function volumeDown() {
+    //   ipc.send('setVolume', currentVolume - 0.1);
+    // }
+    function setVolume(){
+      currentVolume = document.getElementById('volume-slider').value;
+      ipc.send('setVolume', currentVolume);
+
     }
     function repeat() {
       ipc.send('repeat', !repeating);
